@@ -72,8 +72,8 @@ void *dequeue_func(void *data)
         ret = rte_ring_sc_dequeue(r, (void **)&p);
         if (ret != 0) {
             //do something
-            printf("sc_dequeue error: %d. i=%d, count=%d\n", ret, i, rte_ring_count(r));
-            return NULL;
+            // printf("sc_dequeue error: %d. i=%d, count=%d\n", ret, i, rte_ring_count(r));
+            // return NULL;
         }
         if (p != NULL) {
             i++;
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
     int ret = 0;
     pthread_t pid1, pid2, pid3, pid4, pid5, pid6;
     pthread_attr_t pthread_attr;
-    int count = 100000;
+    int count = 10000000;
 
     r = rte_ring_create("test", RING_SIZE, 0);
 
