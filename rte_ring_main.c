@@ -7,7 +7,7 @@
 
 #include "rte_ring.h"
 
-#define RING_SIZE 1<<24
+#define RING_SIZE 1<<4
 
 typedef struct cc_queue_node {
     int data;
@@ -44,10 +44,14 @@ void *enqueue_fun(void *data)
         // p = (cc_queue_node_t *)malloc(sizeof(cc_queue_node_t));
         // p->data = i;
         p = (void*)(i+1);
-        ret = rte_ring_mp_enqueue(r, p);
-        if (ret != 0) {
-            printf("enqueue failed: %d\n", i);
+        ret = -1;
+        while (ret) {
+            ret = rte_ring_mp_enqueue(r, p);
         }
+        // printf("enqueue: %d\n", i);
+        // if (ret != 0) {
+        //     printf("enqueue failed: %d\n", i);
+        // }
     }
 
     return NULL;
