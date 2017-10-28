@@ -7,7 +7,7 @@
 
 #include "rte_ring.h"
 
-#define RING_SIZE 16<<20
+#define RING_SIZE 1<<24
 
 typedef struct cc_queue_node {
     int data;
@@ -25,7 +25,7 @@ static __inline__ ticks getticks(void)
     return (((ticks)a) | (((ticks)d) << 32));
 }
 
-static unsigned long long nstime(void) {
+static __inline__ unsigned long long nstime(void) {
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
     return ((unsigned long long)ts.tv_sec)*1e9 + ts.tv_nsec;
@@ -37,11 +37,13 @@ void *enqueue_fun(void *data)
     int n = (int)data;
     int i = 0;
     int ret;
-    cc_queue_node_t *p;
+    // cc_queue_node_t *p;
+    void *p;
 
     for (; i < n; i++) {
-        p = (cc_queue_node_t *)malloc(sizeof(cc_queue_node_t));
-        p->data = i;
+        // p = (cc_queue_node_t *)malloc(sizeof(cc_queue_node_t));
+        // p->data = i;
+        p = (void*)(i+1);
         ret = rte_ring_mp_enqueue(r, p);
         if (ret != 0) {
             printf("enqueue failed: %d\n", i);
@@ -57,7 +59,8 @@ void *dequeue_func(void *data)
     int i = 0;
     int sum = 0;
     int n = (int)data;
-    cc_queue_node_t *p;
+    // cc_queue_node_t *p;
+    void *p;
     ticks t1, t2, diff;
     unsigned long long ns1, ns2;
     //return;
@@ -69,11 +72,14 @@ void *dequeue_func(void *data)
         ret = rte_ring_sc_dequeue(r, (void **)&p);
         if (ret != 0) {
             //do something
+            printf("sc_dequeue error: %d. i=%d, count=%d\n", ret, i, rte_ring_count(r));
+            return NULL;
         }
         if (p != NULL) {
             i++;
-            sum += p->data;
-            free(p);
+            // sum += p->data;
+            sum += (int)p;
+            // free(p);
             if (i == n) {
                 break;
             }
@@ -96,7 +102,7 @@ int main(int argc, char *argv[])
     int ret = 0;
     pthread_t pid1, pid2, pid3, pid4, pid5, pid6;
     pthread_attr_t pthread_attr;
-    int count = 10000;
+    int count = 100000;
 
     r = rte_ring_create("test", RING_SIZE, 0);
 
@@ -128,6 +134,13 @@ int main(int argc, char *argv[])
     }
 
     printf("start dequeue, 1 consumer thread, dequeue %d numbers\n", 5*count);
+
+    // pthread_join(pid1, NULL);
+    // pthread_join(pid2, NULL);
+    // pthread_join(pid3, NULL);
+    // pthread_join(pid4, NULL);
+    // pthread_join(pid5, NULL);
+    // printf("rte_ring.count: %d\n", rte_ring_count(r));
 
     if ((ret = pthread_create(&pid6, &pthread_attr, dequeue_func, (void *)(5*count))) == 0) {
         //pthread_detach(pid6);
