@@ -2,10 +2,10 @@ objects = rte_ring_main.o rte_ring.o
 CC = gcc
 
 all: $(objects)
-	$(CC) -g -o main $(objects) -lpthread
+	$(CC) -g -O3 -o main $(objects) -lpthread
 
 $(objects): %.o: %.c
-	$(CC) -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) -O3 $< -o $@
 
 clean:
 	rm -f main *.o
