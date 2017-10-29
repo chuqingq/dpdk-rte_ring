@@ -76,12 +76,8 @@ int main(int argc, char *argv[])
     pthread_create(&pid1, NULL, enqueue_fun, (void *)per_count);
 
     // consumers
-    // dequeue_func((void *)per_count);
-    pthread_create(&pid8, NULL, dequeue_func, (void *)per_count);
-
+    dequeue_func((void *)per_count);
     pthread_join(pid1, NULL);
-    pthread_join(pid8, NULL);
-
 
     t2 = nstime();
     printf("complete: count=%d, ns diff=%llu\n", count, t2-t1);

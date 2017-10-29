@@ -29,7 +29,7 @@ void *enqueue_fun(void *data)
         p = (void*)(i+1);
         ret = -1;
         while (ret) {
-            ret = rte_ring_sp_enqueue(r, p);
+            ret = rte_ring_mp_enqueue(r, p);
         }
     }
 
@@ -40,6 +40,7 @@ void *dequeue_func(void *data)
 {
     int ret;
     int i = 0;
+    int sum = 0;
     int n = (int)data;
     void *p;
 
@@ -50,6 +51,7 @@ void *dequeue_func(void *data)
             ret = rte_ring_sc_dequeue(r, (void **)&p);
         }
     }
+
     return NULL;
 }
 
@@ -57,10 +59,10 @@ void *dequeue_func(void *data)
 int main(int argc, char *argv[])
 {
     int ret = 0;
-    pthread_t pid1, pid2, pid3, pid4, pid5, pid6, pid7, pid8;
+    pthread_t pid1, pid2, pid3, pid4, pid5, pid6;
     pthread_attr_t pthread_attr;
     int count = 100000000;
-    int per_count = count;
+    int per_count = count/5;
 
     r = rte_ring_create("test", RING_SIZE, 0);
 
@@ -68,20 +70,27 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    printf("starting...\n");
+
     unsigned long long t1, t2;
 
     t1 = nstime();
 
-    // producers
+    // producer
     pthread_create(&pid1, NULL, enqueue_fun, (void *)per_count);
+    pthread_create(&pid2, NULL, enqueue_fun, (void *)per_count);
+    pthread_create(&pid3, NULL, enqueue_fun, (void *)per_count);
+    pthread_create(&pid4, NULL, enqueue_fun, (void *)per_count);
+    pthread_create(&pid5, NULL, enqueue_fun, (void *)per_count);
 
-    // consumers
-    // dequeue_func((void *)per_count);
-    pthread_create(&pid8, NULL, dequeue_func, (void *)per_count);
+    // consumer
+    dequeue_func((void *)count);
 
     pthread_join(pid1, NULL);
-    pthread_join(pid8, NULL);
-
+    pthread_join(pid2, NULL);
+    pthread_join(pid3, NULL);
+    pthread_join(pid4, NULL);
+    pthread_join(pid5, NULL);
 
     t2 = nstime();
     printf("complete: count=%d, ns diff=%llu\n", count, t2-t1);

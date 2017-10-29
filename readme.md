@@ -23,3 +23,11 @@
     ns diff: 3949222400
     dequeue total: 50000000, sum: -1431365568
 
+# size=16, count=1e9
+
+* 4p4c
+    * complete: count=10000000, ns diff=1132338176
+* count=1e8, 1p1c
+    * complete: count=100000000, ns diff=1295983104
+* count=1e8, 5p1c
+    * complete: count=100000000, ns diff=7801386240
