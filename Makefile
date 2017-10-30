@@ -1,11 +1,11 @@
-objects = rte_ring_main.o rte_ring.o
-CC = gcc
+objects = rte_ring_main_1p1c rte_ring_main_2p2c rte_ring_main_4p4c rte_ring_main_3p1c
 
 all: $(objects)
-	$(CC) -g -O3 -o main $(objects) -lpthread
+	echo "make all success"
 
-$(objects): %.o: %.c
-	$(CC) -c $(CFLAGS) -O3 $< -o $@
+%: %.c rte_ring.c
+	gcc -g -O3 $^ -o $@ -lpthread
 
 clean:
-	rm -f main *.o
+	rm -rf $(objects)
+
