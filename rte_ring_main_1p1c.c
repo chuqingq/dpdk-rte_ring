@@ -42,14 +42,18 @@ void *dequeue_func(void *data)
     int i = 0;
     int n = (int)data;
     void *p;
+    int total_dequeue = 0;
 
     for (i = 0; i < n; i++) {
         p = (void*)(i+1);
         ret = -1;
         while (ret) {
             ret = rte_ring_sc_dequeue(r, (void **)&p);
+            total_dequeue++;
         }
     }
+
+    printf("dequeue_func: total_dequeue=%d\n", total_dequeue);
     return NULL;
 }
 

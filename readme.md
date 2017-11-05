@@ -16,20 +16,35 @@
 
 * RING_SIZE从1<<24改成1<<4，count仍然是1000w
 
-    > ./main
-    start enqueue, 5 producer threads, echo thread enqueue 10000000 numbers.
-    start dequeue, 1 consumer thread, dequeue 50000000 numbers
-    ticks diff: 13458364608
-    ns diff: 3949222400
-    dequeue total: 50000000, sum: -1431365568
+```
+> ./main
+start enqueue, 5 producer threads, echo thread enqueue 10000000 numbers.
+start dequeue, 1 consumer thread, dequeue 50000000 numbers
+ticks diff: 13458364608
+ns diff: 3949222400
+dequeue total: 50000000, sum: -1431365568
+```
 
 # size=16, count=1e8
 
 * count=1e8, 1p1c
     * complete: count=100000000, ns diff=1295983104
+* count=1e8, 2p2c
+    * complete: count=100000000, ns diff=8329000704
 * count=1e8, 5p1c
     * complete: count=100000000, ns diff=7801386240
 * aring, count=1e8, 1p1c
     * Complete: count: 100000000, ns diff: 8928640512
 * count=1e8, 4p4c
     * complete: count=100000000, ns diff=11837379072
+
+## golang channel
+
+count=1e8
+
+* 4p4c
+    * 2017/11/05 17:48:22 count: 100000000, time diff: 9.213674116s
+* 2p2c
+    * 2017/11/05 17:48:47 count: 100000000, time diff: 7.282469757s
+* 1p1c
+    * 2017/11/05 17:49:00 count: 100000000, time diff: 5.829984881s
