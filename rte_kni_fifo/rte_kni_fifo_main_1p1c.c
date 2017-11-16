@@ -7,7 +7,7 @@
 
 #include "rte_kni_fifo.h"
 
-#define RING_SIZE 1<<4
+#define RING_SIZE (1<<4)
 
 static struct rte_kni_fifo* r;
 
