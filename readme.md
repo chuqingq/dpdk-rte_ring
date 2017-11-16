@@ -29,6 +29,8 @@ dequeue total: 50000000, sum: -1431365568
 
 * count=1e8, 1p1c
     * complete: count=100000000, ns diff=1295983104
+* `kni_fifo`, count=1e8, 1p1c
+    * complete: count=100000000, ns diff=1900617216
 * count=1e8, 2p2c
     * complete: count=100000000, ns diff=8329000704
 * count=1e8, 5p1c

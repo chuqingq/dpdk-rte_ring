@@ -45,7 +45,7 @@ void *dequeue_func(void *data)
     int total_dequeue = 0;
 
     for (i = 0; i < n; i++) {
-        p = (void*)(i+1);
+        // p = (void*)(i+1);
         ret = 0;
         while (!ret) {
             ret = kni_fifo_get(r, (void **)&p, 1);
