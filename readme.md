@@ -25,28 +25,34 @@ ns diff: 3949222400
 dequeue total: 50000000, sum: -1431365568
 ```
 
-# size=16, count=1e8
+# throughput
 
-* count=1e8, 1p1c
+`rte_ring`的size都是16
+* `rte_ring`, count=1e8, 1p1c
     * complete: count=100000000, ns diff=1295983104
 * `kni_fifo`, count=1e8, 1p1c
     * complete: count=100000000, ns diff=1900617216
-* count=1e8, 2p2c
+* `folly.UMPMCBlockingQueue`, count=1e8, 4p4c
+    * count: 100000000, elapsed: 7534004338 ns
+* `rte_ring`, count=1e8, 2p2c
     * complete: count=100000000, ns diff=8329000704
-* count=1e8, 5p1c
+* `rte_ring`, count=1e8, 5p1c
     * complete: count=100000000, ns diff=7801386240
-* aring, count=1e8, 1p1c
+* `aring`, count=1e8, 1p1c
     * Complete: count: 100000000, ns diff: 8928640512
-* count=1e8, 4p4c
+* `rte_ring`, count=1e8, 4p4c
     * complete: count=100000000, ns diff=11837379072
-
-## golang channel
-
-count=1e8
-
-* 4p4c
+* `golang.channel`, count=1e8, 4p4c
     * 2017/11/05 17:48:22 count: 100000000, time diff: 9.213674116s
-* 2p2c
+* `golang.channel`, count=1e8, 2p2c
     * 2017/11/05 17:48:47 count: 100000000, time diff: 7.282469757s
-* 1p1c
+* `golang.channel`, count=1e8, 1p1c
     * 2017/11/05 17:49:00 count: 100000000, time diff: 5.829984881s
+
+# delay
+
+在高性能服务器（E9000）上验证：
+* 在EAL环境下，`rte_ring`的1p1c大约768ns
+* 在非EAL环境下（已提取），`rte_ring`的1p1c大约6~7us
+也就是10倍的关系，可见EAL环境可能做了一些特殊处理，或者提取时用的普通malloc性能较差。
+
