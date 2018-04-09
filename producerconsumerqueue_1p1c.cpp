@@ -99,6 +99,9 @@ int main(int argc, char *argv[])
     printf("complete: count=%d, ns diff=%llu\n", count, t2-t1);
 
     // rte_ring_free(r);
+    if (!queue.isEmpty()) {
+        printf("queue is not empty\n");
+    }
 
     return 0;
 }
