@@ -59,6 +59,10 @@ void *dequeue_func(void *data)
         while (!queue.read(p)) {
             total_dequeue++;
         }
+        total_dequeue++;
+        // if (p != i+1) {
+        //     printf("%d != %d\n", p, i);
+        // }
     }
 
     printf("dequeue_func: total_dequeue=%d\n", total_dequeue);
