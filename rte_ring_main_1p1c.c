@@ -22,15 +22,17 @@ void *enqueue_fun(void *data)
 {
     int n = (int)data;
     int i;
-    int ret;
+    // int ret;
     void *p;
 
     for (i = 0; i < n; i++) {
-        p = (void*)(i+1);
-        ret = -1;
-        while (ret) {
-            ret = rte_ring_sp_enqueue(r, p);
-        }
+        // p = (void*)(i+1);
+        // ret = -1;
+        // while (ret) {
+        //     ret = rte_ring_sp_enqueue(r, p);
+        // }
+        while (rte_ring_sp_enqueue(r, (void*)(i+1)))
+            ;
     }
 
     return NULL;
@@ -38,19 +40,21 @@ void *enqueue_fun(void *data)
 
 void *dequeue_func(void *data)
 {
-    int ret;
+    // int ret;
     int i = 0;
     int n = (int)data;
     void *p;
     int total_dequeue = 0;
 
     for (i = 0; i < n; i++) {
-        p = (void*)(i+1);
-        ret = -1;
-        while (ret) {
-            ret = rte_ring_sc_dequeue(r, (void **)&p);
+        //p = (void*)(i+1);
+        // ret = -1;
+        // while (ret) {
+        //     ret = rte_ring_sc_dequeue(r, (void **)&p);
+        //     total_dequeue++;
+        // }
+        while (rte_ring_sc_dequeue(r, (void **)&p))
             total_dequeue++;
-        }
     }
 
     printf("dequeue_func: total_dequeue=%d\n", total_dequeue);

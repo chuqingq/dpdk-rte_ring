@@ -27,11 +27,16 @@ dequeue total: 50000000, sum: -1431365568
 
 # throughput
 
+env: chuqq@hp
+
 `rte_ring`的size都是16
-* `rte_ring`, count=1e8, 1p1c
-    * complete: count=100000000, ns diff=1295983104
+* `folly::ProducerConsumerQueue`, count=1e8, 1p1c
+    * complete: count=100000000, ns diff=761767680
 * `kni_fifo`, count=1e8, 1p1c
-    * complete: count=100000000, ns diff=1900617216
+    * complete: count=100000000, ns diff=1077332224
+* `rte_ring`, count=1e8, 1p1c
+    * complete: count=100000000, ns diff=1685573632
+
 * `folly.UMPMCBlockingQueue`, count=1e8, 4p4c
     * count: 100000000, elapsed: 7534004338 ns
 * `rte_ring`, count=1e8, 2p2c

@@ -22,15 +22,17 @@ void *enqueue_fun(void *data)
 {
     int n = (int)data;
     int i;
-    int ret;
+    // int ret;
     void *p;
 
     for (i = 0; i < n; i++) {
         p = (void*)(i+1);
-        ret = 0;
-        while (!ret) {
-            ret = kni_fifo_put(r, &p, 1);
-        }
+        // ret = 0;
+        // while (!ret) {
+        //     ret = kni_fifo_put(r, &p, 1);
+        // }
+        while (kni_fifo_put(r, &p, 1))
+            ;
     }
 
     return NULL;
@@ -38,7 +40,7 @@ void *enqueue_fun(void *data)
 
 void *dequeue_func(void *data)
 {
-    int ret;
+    // int ret;
     int i = 0;
     int n = (int)data;
     void *p;
@@ -46,9 +48,12 @@ void *dequeue_func(void *data)
 
     for (i = 0; i < n; i++) {
         // p = (void*)(i+1);
-        ret = 0;
-        while (!ret) {
-            ret = kni_fifo_get(r, (void **)&p, 1);
+        // ret = 0;
+        // while (!ret) {
+        //     ret = kni_fifo_get(r, (void **)&p, 1);
+        //     total_dequeue++;
+        // }
+        while (kni_fifo_get(r, (void **)&p, 1)) {
             total_dequeue++;
         }
     }

@@ -1,4 +1,4 @@
-// g++ producerconsumerqueue_1p1c.cpp -std=c++14 -O3 -pthread -I/home/chuqq/temp/folly/folly_bin/include -L/home/chuqq/temp/folly/folly_bin/lib -lfolly
+// g++ -o producerconsumerqueue_1p1c{,.cpp} -std=c++14 -O3 -pthread -I/home/chuqq/temp/folly/folly_bin/include -L/home/chuqq/temp/folly/folly_bin/lib -lfolly
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -59,7 +59,7 @@ void *dequeue_func(void *data)
         while (!queue.read(p)) {
             total_dequeue++;
         }
-        total_dequeue++;
+        // total_dequeue++;
         // if (p != i+1) {
         //     printf("%d != %d\n", p, i);
         // }
