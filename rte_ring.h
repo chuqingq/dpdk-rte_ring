@@ -321,6 +321,8 @@ struct rte_ring {
  */
 struct rte_ring *rte_ring_create(const char *name, unsigned count, unsigned flags);
 
+struct rte_ring *rte_ring_init(struct rte_ring *r, const char *name, unsigned count, unsigned flags);
+
 /**
  * Free the ring buffer
  */

@@ -112,6 +112,42 @@ rte_ring_create(const char *name, unsigned count, unsigned flags)
 	return r;
 }
 
+/* init the ring */
+struct rte_ring *
+rte_ring_init(struct rte_ring *r, const char *name, unsigned count, unsigned flags)
+{
+	// struct rte_ring *r;
+	// size_t ring_size;
+
+	/* count must be a power of 2 */
+	if ((!POWEROF2(count)) || (count > RTE_RING_SZ_MASK )) {
+		errno = EINVAL;
+		return NULL;
+	}
+
+	// ring_size = count * sizeof(void *) + sizeof(struct rte_ring);
+
+	// r = (struct rte_ring *)malloc(ring_size);
+	if (r != NULL) {
+
+		/* init the ring structure */
+		memset(r, 0, sizeof(*r));
+		snprintf(r->name, sizeof(r->name), "%s", name);
+		r->flags = flags;
+		r->prod.watermark = count;
+		r->prod.sp_enqueue = !!(flags & RING_F_SP_ENQ);
+		r->cons.sc_dequeue = !!(flags & RING_F_SC_DEQ);
+		r->prod.size = r->cons.size = count;
+		r->prod.mask = r->cons.mask = count-1;
+		r->prod.head = r->cons.head = 0;
+		r->prod.tail = r->cons.tail = 0;
+	} else {
+		errno = ENOBUFS;
+	}
+	
+	return r;
+}
+
 /*
  * change the high water mark. If *count* is 0, water marking is
  * disabled
